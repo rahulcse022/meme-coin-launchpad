@@ -19,7 +19,7 @@ describe("creation fees", () => {
 
   it("keeps fees inactive until FEE_RECIPIENT_ADDRESS is a real wallet", () => {
     try {
-      const recipient = getFeeRecipientAddress();
+      const recipient = getFeeRecipientAddress("sepolia");
       expect(getCreationFee("sepolia").active).toBe(true);
       expect(getCreationFee("sepolia").recipient).toBe(recipient);
     } catch (error) {

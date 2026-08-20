@@ -169,8 +169,8 @@ export default function CreateWizard() {
         <section className="space-y-4">
           <h2 className="text-lg font-semibold">Select network</h2>
           <p className="text-sm text-zinc-600 dark:text-zinc-400">
-            Sepolia and BSC Testnet stay in this list for EVM testing. Use the
-            checkbox only if you also want other test networks.
+            Use the checkbox below if you want to deploy to test networks for
+            testing purposes.
           </p>
           <label className="flex min-h-11 items-center gap-3 text-sm">
             <input
@@ -179,7 +179,7 @@ export default function CreateWizard() {
               checked={showTestnets}
               onChange={(event) => setShowTestnets(event.target.checked)}
             />
-            Show additional test networks
+            Show test networks
           </label>
           <NetworkPicker
             family={family}
@@ -253,6 +253,9 @@ export default function CreateWizard() {
                 network={network}
                 tokenAddress={createdToken.tokenAddress}
                 transactionHash={createdToken.transactionHash}
+                symbol={draft.symbol}
+                decimals={draft.decimals}
+                logoUrl={logoUrl}
               />
             ) : (
               <CreateFeePanel

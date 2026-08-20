@@ -17,7 +17,7 @@ export async function saveVerifiedToken(input: {
   transactionHash: string;
 }): Promise<CreatedTokenDocument> {
   const fee = getCreationFee(input.networkId);
-  const feeRecipient = getFeeRecipientAddress();
+  const feeRecipient = getFeeRecipientAddress(input.networkId);
   const collection = await getTokensCollection();
 
   const document: CreatedTokenDocument = {

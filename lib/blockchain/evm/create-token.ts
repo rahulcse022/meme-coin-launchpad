@@ -69,7 +69,7 @@ export async function createEvmToken(
 
     const fee = getCreationFee(network.id);
     const feeValue = getCreationFeeBaseUnits(network.id);
-    const feeRecipient = getFeeRecipientAddress();
+    const feeRecipient = getFeeRecipientAddress(network.id);
     const onChainSupply = scaleTokenAmount(params.totalSupply, params.decimals);
 
     const hash = await deployContract(config, {
@@ -81,7 +81,7 @@ export async function createEvmToken(
         params.decimals,
         onChainSupply,
         account.address,
-        feeRecipient,
+        feeRecipient as `0x${string}`,
       ],
       value: feeValue,
       chainId: network.evmChainId,

@@ -18,23 +18,16 @@ export default function NetworkPicker({
     (network) => network.testnet && network.alwaysShowInCreateFlow,
   );
   const extraTestnets = networks.filter(
-    (network) => network.testnet && !network.alwaysShowInCreateFlow && showTestnets,
+    (network) => network.testnet && !network.alwaysShowInCreateFlow,
   );
 
   return (
     <div className="space-y-6">
       <NetworkGroup title="Mainnets" networks={mainnets} value={value} onChange={onChange} />
-      {featuredTestnets.length > 0 ? (
+      {showTestnets && (featuredTestnets.length > 0 || extraTestnets.length > 0) ? (
         <NetworkGroup
           title="Testnets"
           networks={[...featuredTestnets, ...extraTestnets]}
-          value={value}
-          onChange={onChange}
-        />
-      ) : extraTestnets.length > 0 ? (
-        <NetworkGroup
-          title="Testnets"
-          networks={extraTestnets}
           value={value}
           onChange={onChange}
         />

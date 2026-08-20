@@ -109,7 +109,14 @@ export async function verifyEvmTokenCreation(
   const hash = input.transactionHash as Hash;
   const creator = getAddress(input.creatorAddress);
   const expectedFee = getCreationFeeBaseUnits(network.id);
-  const feeRecipient = getFeeRecipientAddress();
+  const feeRecipient = getFeeRecipientAddress(network.id);
+
+  // Wait for the public node to sync the transaction (useful when frontend RPC is faster)
+  try {
+    await client.waitForTransactionReceipt({ hash, timeout: 15_000 });
+  } catch {
+    // If it times out or fails, we'll catch it in the manual checks below
+  }
 
   const transaction = await client.getTransaction({ hash }).catch(() => null);
 
