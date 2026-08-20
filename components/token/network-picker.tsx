@@ -1,0 +1,91 @@
+import { getNetworksByFamily, type ChainFamily, type SupportedNetwork } from "@/config/chains";
+import { cn } from "@/lib/utils/cn";
+
+export default function NetworkPicker({
+  family,
+  value,
+  showTestnets,
+  onChange,
+}: {
+  family: ChainFamily;
+  value: string | null;
+  showTestnets: boolean;
+  onChange: (network: SupportedNetwork) => void;
+}) {
+  const networks = getNetworksByFamily(family);
+  const mainnets = networks.filter((network) => !network.testnet);
+  const featuredTestnets = networks.filter(
+    (network) => network.testnet && network.alwaysShowInCreateFlow,
+  );
+  const extraTestnets = networks.filter(
+    (network) => network.testnet && !network.alwaysShowInCreateFlow && showTestnets,
+  );
+
+  return (
+    <div className="space-y-6">
+      <NetworkGroup title="Mainnets" networks={mainnets} value={value} onChange={onChange} />
+      {featuredTestnets.length > 0 ? (
+        <NetworkGroup
+          title="Testnets"
+          networks={[...featuredTestnets, ...extraTestnets]}
+          value={value}
+          onChange={onChange}
+        />
+      ) : extraTestnets.length > 0 ? (
+        <NetworkGroup
+          title="Testnets"
+          networks={extraTestnets}
+          value={value}
+          onChange={onChange}
+        />
+      ) : null}
+    </div>
+  );
+}
+
+function NetworkGroup({
+  title,
+  networks,
+  value,
+  onChange,
+}: {
+  title: string;
+  networks: SupportedNetwork[];
+  value: string | null;
+  onChange: (network: SupportedNetwork) => void;
+}) {
+  if (networks.length === 0) {
+    return null;
+  }
+
+  return (
+    <div>
+      <h3 className="mb-3 text-sm font-semibold text-zinc-500">{title}</h3>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        {networks.map((network) => {
+          const selected = value === network.id;
+
+          return (
+            <button
+              key={network.id}
+              type="button"
+              onClick={() => onChange(network)}
+              aria-pressed={selected}
+              className={cn(
+                "min-h-16 rounded-2xl border p-4 text-left",
+                selected
+                  ? "border-teal-500 bg-teal-50 dark:bg-teal-950/40"
+                  : "border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950",
+              )}
+            >
+              <span className="block font-semibold">{network.name}</span>
+              <span className="mt-1 block text-sm text-zinc-500">
+                {network.testnet ? "Testnet" : "Mainnet"} · {network.shortName}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
