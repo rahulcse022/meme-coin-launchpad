@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useAppKitNetwork } from "@reown/appkit/react";
 import type { SupportedNetwork } from "@/config/chains";
 import {
   formatPlatformFee,
@@ -41,13 +42,26 @@ export default function CreateFeePanel({
   retryVerify?: boolean;
   onPay: () => void;
 }) {
+  const { caipNetwork, switchNetwork } = useAppKitNetwork();
+  const isCorrectNetwork = caipNetwork?.id === network.appKitNetwork.id;
+
   const feeQuery = useQuery({
     queryKey: ["platform-fee", network.id],
     queryFn: () => getPlatformFee(network.id),
   });
 
+  const handleSwitchNetwork = async () => {
+    try {
+      if (switchNetwork) {
+        await switchNetwork(network.appKitNetwork);
+      }
+    } catch (err) {
+      console.error("Failed to switch network:", err);
+    }
+  };
+
   return (
-    <section className="rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-950">
+    <section className="rounded-2xl border border-zinc-200/80 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900 shadow-sm">
       <h2 className="text-lg font-semibold">Token creation fee</h2>
       {feeQuery.isLoading ? (
         <p className="mt-3 text-sm text-zinc-500">Loading current platform fee...</p>
@@ -88,23 +102,35 @@ export default function CreateFeePanel({
           {error}
         </p>
       ) : null}
-      <Button
-        className="mt-5 w-full"
-        disabled={
-          disabled ||
-          feeQuery.isLoading ||
-          Boolean(feeQuery.error) ||
-          status === "success" ||
-          (status !== null && busyStatuses.includes(status))
-        }
-        onClick={onPay}
-      >
-        {status === "success"
-          ? "Token created"
-          : retryVerify
-            ? "Retry verification"
-            : "Pay & Create Token"}
-      </Button>
+
+      {!isCorrectNetwork && !disabled ? (
+        <Button
+          variant="gradient"
+          className="mt-5 w-full"
+          onClick={handleSwitchNetwork}
+        >
+          Switch Network to {network.name}
+        </Button>
+      ) : (
+        <Button
+          variant="gradient"
+          className="mt-5 w-full"
+          disabled={
+            disabled ||
+            feeQuery.isLoading ||
+            Boolean(feeQuery.error) ||
+            status === "success" ||
+            (status !== null && busyStatuses.includes(status))
+          }
+          onClick={onPay}
+        >
+          {status === "success"
+            ? "Token created"
+            : retryVerify
+              ? "Retry verification"
+              : "Pay & Create Token"}
+        </Button>
+      )}
     </section>
   );
 }

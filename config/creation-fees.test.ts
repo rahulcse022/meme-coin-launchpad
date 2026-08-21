@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import {
-  CREATION_FEE_AMOUNT,
   getConfiguredPlatformFees,
   getCreationFee,
   getCreationFeeBaseUnits,
@@ -8,11 +7,11 @@ import {
 } from "@/config/creation-fees";
 
 describe("creation fees", () => {
-  it("charges 0.1 native tokens on every configured network", () => {
+  it("charges native tokens on every configured network", () => {
     const fees = getConfiguredPlatformFees();
 
     expect(fees.length).toBeGreaterThan(0);
-    expect(fees.every((fee) => fee.amount === CREATION_FEE_AMOUNT)).toBe(
+    expect(fees.every((fee) => fee.amount === "0.1" || fee.amount === "0.001")).toBe(
       true,
     );
   });
@@ -30,22 +29,21 @@ describe("creation fees", () => {
 
   it("uses tBNB on BSC Testnet and ETH on Sepolia", () => {
     expect(getCreationFee("bsc-testnet")).toMatchObject({
-      amount: "0.1",
+      amount: "0.001",
       currency: "tBNB",
       decimals: 18,
     });
     expect(getCreationFee("sepolia")).toMatchObject({
-      amount: "0.1",
+      amount: "0.001",
       currency: "ETH",
       decimals: 18,
     });
   });
 
-  it("converts the EVM fee to 0.1 * 10^18 base units", () => {
-    const expected = BigInt("100000000000000000");
-    expect(getCreationFeeBaseUnits("bsc-testnet")).toBe(expected);
-    expect(getCreationFeeBaseUnits("sepolia")).toBe(expected);
-    expect(getCreationFeeBaseUnits("ethereum")).toBe(expected);
-    expect(getCreationFeeBaseUnits("bnb")).toBe(expected);
+  it("converts the EVM fee to base units", () => {
+    expect(getCreationFeeBaseUnits("bsc-testnet")).toBe(BigInt("1000000000000000"));
+    expect(getCreationFeeBaseUnits("sepolia")).toBe(BigInt("1000000000000000"));
+    expect(getCreationFeeBaseUnits("ethereum")).toBe(BigInt("1000000000000000"));
+    expect(getCreationFeeBaseUnits("bnb")).toBe(BigInt("1000000000000000"));
   });
 });

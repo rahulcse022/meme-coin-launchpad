@@ -24,7 +24,7 @@ export default function TokenPreview({
   });
 
   return (
-    <article className="rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-950">
+    <article className="rounded-2xl border border-zinc-200/80 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900 shadow-sm">
       <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
         Token preview
       </p>
@@ -59,10 +59,6 @@ export default function TokenPreview({
           mono={Boolean(creatorAddress)}
         />
         <PreviewRow
-          label="Total supply"
-          value={values.totalSupply ? formatTokenAmount(values.totalSupply) : "—"}
-        />
-        <PreviewRow
           label="Initial supply"
           value={values.initialSupply ? formatTokenAmount(values.initialSupply) : "—"}
         />
@@ -70,11 +66,15 @@ export default function TokenPreview({
           label="Decimals"
           value={values.decimals === undefined ? "—" : String(values.decimals)}
         />
-        <PreviewRow label="Creator allocation" value={formatPercent(Number(values.creatorAllocation || 0))} />
-        <PreviewRow label="Liquidity allocation" value={formatPercent(Number(values.liquidityAllocation || 0))} />
-        <PreviewRow label="Community allocation" value={formatPercent(Number(values.communityAllocation || 0))} />
-        <PreviewRow label="Burn allocation" value={formatPercent(Number(values.burnAllocation || 0))} />
-        <PreviewRow label="Allocation total" value={formatPercent(total)} />
+        {values.hasAllocations && (
+          <>
+            <PreviewRow label="Creator allocation" value={formatPercent(Number(values.creatorAllocation || 0))} />
+            <PreviewRow label="Liquidity allocation" value={formatPercent(Number(values.liquidityAllocation || 0))} />
+            <PreviewRow label="Community allocation" value={formatPercent(Number(values.communityAllocation || 0))} />
+            <PreviewRow label="Burn allocation" value={formatPercent(Number(values.burnAllocation || 0))} />
+            <PreviewRow label="Allocation total" value={formatPercent(total)} />
+          </>
+        )}
       </dl>
 
       {values.description ? (

@@ -15,9 +15,10 @@ describe("createTokenConfigSchema", () => {
     expect(parsed.decimals).toBe(18);
   });
 
-  it("rejects allocations that do not sum to 100", () => {
+  it("rejects allocations that do not sum to 100 when hasAllocations is true", () => {
     const result = createTokenConfigSchema("evm").safeParse({
       ...valid,
+      hasAllocations: true,
       creatorAllocation: 50,
       liquidityAllocation: 50,
       communityAllocation: 50,
@@ -30,22 +31,17 @@ describe("createTokenConfigSchema", () => {
     }
   });
 
-  it("rejects initial supply above total supply", () => {
-    const result = createTokenConfigSchema("solana").safeParse({
+  it("skips allocation checks when hasAllocations is false", () => {
+    const result = createTokenConfigSchema("evm").safeParse({
       ...valid,
-      decimals: 9,
-      totalSupply: "1000",
-      initialSupply: "1001",
+      hasAllocations: false,
+      creatorAllocation: 50,
+      liquidityAllocation: 50,
+      communityAllocation: 50,
+      burnAllocation: 0,
     });
 
-    expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(
-        result.error.issues.some((issue) =>
-          issue.message.includes("cannot be greater than total supply"),
-        ),
-      ).toBe(true);
-    }
+    expect(result.success).toBe(true);
   });
 
   it("rejects Solana decimals above the configured maximum", () => {

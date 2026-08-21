@@ -39,4 +39,4 @@ export default function Field({
 }
 
 export const inputClassName =
-  "min-h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-base text-zinc-950 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-white";
+  "min-h-11 w-full rounded-xl border border-zinc-200/80 bg-white px-3 text-base text-zinc-950 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--accent)] dark:border-zinc-800 dark:bg-zinc-900 dark:text-white";

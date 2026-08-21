@@ -151,7 +151,7 @@ export const supportedNetworks: readonly SupportedNetwork[] = [
     name: "Solana",
     shortName: "SOL",
     testnet: false,
-    explorerUrl: "https://solscan.io",
+    explorerUrl: "https://explorer.solana.com",
     appKitNetwork: solana,
     nativeSymbol: "SOL",
   },
@@ -161,7 +161,7 @@ export const supportedNetworks: readonly SupportedNetwork[] = [
     name: "Solana Devnet",
     shortName: "SOL-DEV",
     testnet: true,
-    explorerUrl: "https://solscan.io/?cluster=devnet",
+    explorerUrl: "https://explorer.solana.com",
     appKitNetwork: solanaDevnet,
     nativeSymbol: "SOL",
   },
@@ -171,7 +171,7 @@ export const supportedNetworks: readonly SupportedNetwork[] = [
     name: "Solana Testnet",
     shortName: "SOL-TEST",
     testnet: true,
-    explorerUrl: "https://solscan.io/?cluster=testnet",
+    explorerUrl: "https://explorer.solana.com",
     appKitNetwork: solanaTestnet,
     nativeSymbol: "SOL",
   },
@@ -228,10 +228,40 @@ export function getNetworkById(id: string) {
 }
 
 export function getExplorerTxUrl(network: SupportedNetwork, hash: string) {
+  if (network.family === "tron") {
+    if (network.testnet) {
+      return `${network.explorerUrl}/transaction/${hash}/overview`;
+    }
+    return `${network.explorerUrl}/transaction/${hash}`;
+  }
+  if (network.family === "solana") {
+    if (network.id === "solana-devnet") {
+      return `${network.explorerUrl}/tx/${hash}?cluster=devnet`;
+    }
+    if (network.id === "solana-testnet") {
+      return `${network.explorerUrl}/tx/${hash}?cluster=testnet`;
+    }
+    return `${network.explorerUrl}/tx/${hash}`;
+  }
   return `${network.explorerUrl}/tx/${hash}`;
 }
 
 export function getExplorerTokenUrl(network: SupportedNetwork, address: string) {
+  if (network.family === "tron") {
+    if (network.testnet) {
+      return `${network.explorerUrl}/address/${address}/transactions`;
+    }
+    return `${network.explorerUrl}/address/${address}`;
+  }
+  if (network.family === "solana") {
+    if (network.id === "solana-devnet") {
+      return `${network.explorerUrl}/address/${address}?cluster=devnet`;
+    }
+    if (network.id === "solana-testnet") {
+      return `${network.explorerUrl}/address/${address}?cluster=testnet`;
+    }
+    return `${network.explorerUrl}/address/${address}`;
+  }
   return `${network.explorerUrl}/token/${address}`;
 }
 

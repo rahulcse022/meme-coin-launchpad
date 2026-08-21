@@ -11,7 +11,7 @@ export default function ThemeToggle() {
   return (
     <button
       type="button"
-      className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-700 transition-colors hover:bg-zinc-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-200 dark:hover:bg-zinc-900"
+      className="inline-flex h-8 min-w-8 items-center justify-center rounded-full border border-zinc-200 bg-white px-3 text-zinc-700 transition-colors hover:bg-zinc-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
       aria-label={
         isClient ? `Switch to ${isDark ? "light" : "dark"} theme` : "Toggle theme"
       }

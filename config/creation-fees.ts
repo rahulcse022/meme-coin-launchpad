@@ -24,29 +24,27 @@ export type NetworkFeeConfig = {
 
 export const NETWORK_FEE_CONFIG_MAP: Record<string, NetworkFeeConfig> = {
   // EVM
-  ethereum: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.1" },
-  bnb: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.1" },
-  polygon: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.1" },
-  base: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.1" },
-  arbitrum: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.1" },
-  sepolia: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.1" },
-  "bsc-testnet": { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.1" },
-  "polygon-amoy": { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.1" },
-  "base-sepolia": { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.1" },
-  "arbitrum-sepolia": { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.1" },
+  ethereum: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.001" },
+  bnb: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.001" },
+  polygon: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.001" },
+  base: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.001" },
+  arbitrum: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.001" },
+  sepolia: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.001" },
+  "bsc-testnet": { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.001" },
+  "polygon-amoy": { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.001" },
+  "base-sepolia": { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.001" },
+  "arbitrum-sepolia": { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.001" },
 
   // Solana
-  solana: { recipient: SOLANA_FEE_RECIPINT_ADDRESS, amount: "0.1" },
-  "solana-devnet": { recipient: SOLANA_DEVNET_RECIPINT_ADDRESS, amount: "0.1" },
-  "solana-testnet": { recipient: SOLANA_DEVNET_RECIPINT_ADDRESS, amount: "0.1" },
+  solana: { recipient: SOLANA_FEE_RECIPINT_ADDRESS, amount: "0.001" },
+  "solana-devnet": { recipient: SOLANA_DEVNET_RECIPINT_ADDRESS, amount: "0.001" },
+  "solana-testnet": { recipient: SOLANA_DEVNET_RECIPINT_ADDRESS, amount: "0.001" },
 
   // Tron
-  tron: { recipient: SHASTA_FEE_RECIPINT_ADDRESS, amount: "0.1" },
-  "tron-shasta": { recipient: SHASTA_FEE_RECIPINT_ADDRESS, amount: "0.1" },
+  tron: { recipient: SHASTA_FEE_RECIPINT_ADDRESS, amount: "0.001" },
+  "tron-shasta": { recipient: SHASTA_FEE_RECIPINT_ADDRESS, amount: "0.001" },
 };
 
-/** Default native token amount charged to create a token if not found in map. */
-export const CREATION_FEE_AMOUNT = "0.1";
 
 const decimalsByFamily: Record<ChainFamily, number> = {
   evm: 18,
@@ -94,7 +92,7 @@ export function getCreationFee(networkId: string): PlatformFeeQuote {
   }
 
   const config = NETWORK_FEE_CONFIG_MAP[networkId];
-  const amount = config?.amount || CREATION_FEE_AMOUNT;
+  const amount = config?.amount ;
 
   let recipient = "";
   let active = true;

@@ -37,5 +37,5 @@ export const appKitMetadata = {
   name: siteConfig.name,
   description: siteConfig.description,
   url: siteConfig.url,
-  icons: [`${siteConfig.url}/icons/icon-192.png`],
+  icons: [`${siteConfig.url}/icons/logo.png`],
 };

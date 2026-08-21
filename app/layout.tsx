@@ -39,11 +39,8 @@ export const metadata: Metadata = {
     telephone: false,
   },
   icons: {
-    icon: [
-      { url: "/icons/icon-192.png", sizes: "192x192" },
-      { url: "/icons/icon-512.png", sizes: "512x512" },
-    ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+    icon: [{ url: "/icons/logo.png", sizes: "any" }],
+    apple: [{ url: "/icons/logo.png", sizes: "180x180" }],
   },
 };
 

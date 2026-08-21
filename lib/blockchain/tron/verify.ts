@@ -1,3 +1,5 @@
+import crypto from "crypto";
+
 const SHASTA_FULL_NODE = "https://api.shasta.trongrid.io";
 const TRON_FULL_NODE = "https://api.trongrid.io";
 
@@ -89,9 +91,6 @@ function hexStringToBytes(hex: string): Uint8Array {
 const BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 
 function base58CheckEncode(payload: Uint8Array): string {
-  // Double SHA-256 checksum (4 bytes)
-  // Note: In server context we can use Node's crypto
-  const crypto = require("crypto") as typeof import("crypto");
   const hash1 = crypto.createHash("sha256").update(payload).digest();
   const hash2 = crypto.createHash("sha256").update(hash1).digest();
   const checksum = hash2.slice(0, 4);

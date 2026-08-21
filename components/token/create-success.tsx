@@ -28,7 +28,8 @@ export default function CreateSuccess({
   const { watchAsset } = useWatchAsset();
   return (
     <section
-      className="rounded-2xl border border-teal-500/40 bg-teal-50 p-5 dark:bg-teal-950/30"
+      className="rounded-2xl border p-5"
+      style={{ borderColor: "var(--accent-muted)", background: "var(--accent-subtle)" }}
       role="status"
     >
       <h2 className="flex items-center gap-3 text-lg font-semibold">
@@ -36,7 +37,8 @@ export default function CreateSuccess({
           <img
             src={logoUrl}
             alt={`${symbol} logo`}
-            className="size-9 rounded-full object-cover ring-2 ring-teal-400/50"
+            className="size-9 rounded-full object-cover"
+            style={{ outline: "2px solid var(--accent-muted)", outlineOffset: "2px" }}
           />
         )}
         Token created
@@ -58,7 +60,7 @@ export default function CreateSuccess({
           href={getExplorerTokenUrl(network, tokenAddress)}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex min-h-11 items-center justify-center rounded-xl border border-zinc-200 bg-white px-4 text-sm font-semibold dark:border-zinc-800 dark:bg-zinc-950"
+          className="inline-flex min-h-11 items-center justify-center rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-5 text-sm font-semibold text-white shadow-md hover:opacity-90 active:scale-[0.98] transition-all"
         >
           View token
         </a>
@@ -66,7 +68,7 @@ export default function CreateSuccess({
           href={getExplorerTxUrl(network, transactionHash)}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex min-h-11 items-center justify-center rounded-xl border border-zinc-200 bg-white px-4 text-sm font-semibold dark:border-zinc-800 dark:bg-zinc-950"
+          className="inline-flex min-h-11 items-center justify-center rounded-xl border border-zinc-200/80 bg-white px-4 text-sm font-semibold text-zinc-900 hover:bg-zinc-50 shadow-sm transition-all active:scale-[0.98] dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800/80"
         >
           View transaction
         </a>
@@ -85,7 +87,7 @@ export default function CreateSuccess({
                 },
               })
             }
-            className="inline-flex min-h-11 items-center justify-center rounded-xl border border-zinc-200 bg-white px-4 text-sm font-semibold dark:border-zinc-800 dark:bg-zinc-950 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors cursor-pointer"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl border border-zinc-200/80 bg-white px-4 text-sm font-semibold text-zinc-900 hover:bg-zinc-50 shadow-sm transition-all active:scale-[0.98] cursor-pointer dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800/80"
           >
             Add token to wallet
           </button>

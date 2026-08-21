@@ -30,7 +30,7 @@ async function fetchCreatorTokens(address: string): Promise<TokensResponse> {
   if (!response.ok || !payload || !("tokens" in payload)) {
     throw new Error(
       (payload && "error" in payload && payload.error) ||
-        "Could not load tokens for this wallet.",
+      "Could not load tokens for this wallet.",
     );
   }
 
@@ -71,27 +71,13 @@ export default function DashboardPage() {
 
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="text-2xl font-bold sm:text-3xl">Dashboard</h1>
+      <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent w-fit">Dashboard</h1>
       <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">
         Your connected wallet is your account. Tokens appear here after they are
         verified on-chain and saved to the database.
       </p>
 
-      <section className="mt-6 rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-950">
-        <h2 className="text-sm font-semibold">Wallet</h2>
-        {isConnected && address ? (
-          <p className="mt-3 break-all font-mono text-sm">{formatAddress(address, 6)}</p>
-        ) : (
-          <div className="mt-4 space-y-3">
-            <p className="text-sm text-zinc-600 dark:text-zinc-400">
-              {status === "connecting"
-                ? "Waiting for wallet..."
-                : "Connect a wallet to see tokens you created."}
-            </p>
-            <ConnectButton />
-          </div>
-        )}
-      </section>
+
 
       <section className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <StatCard
@@ -123,16 +109,16 @@ export default function DashboardPage() {
         </p>
       ) : null}
 
-      <section className="mt-6 rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950">
-        <h2 className="font-medium">My tokens</h2>
+      <section className="mt-6 rounded-2xl border border-zinc-200/80 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900 shadow-sm">
+        <h2 className="font-semibold">My tokens</h2>
         {!isConnected ? (
-          <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+          <p className="mt-2 text-sm leading-6 text-zinc-650 dark:text-zinc-400">
             Connect the wallet that deployed the token to see it here.
           </p>
         ) : tokensQuery.isLoading ? (
           <p className="mt-2 text-sm text-zinc-500">Loading tokens from the database...</p>
         ) : tokens.length === 0 ? (
-          <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+          <p className="mt-2 text-sm leading-6 text-zinc-650 dark:text-zinc-400">
             No tokens yet for this wallet. Create a token and wait for
             verification to finish.
           </p>
@@ -160,9 +146,9 @@ function StatCard({
   hint?: string;
 }) {
   return (
-    <article className="rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-950">
-      <p className="text-sm text-zinc-500">{label}</p>
-      <p className="mt-2 text-2xl font-semibold">{value}</p>
+    <article className="rounded-2xl border border-zinc-200/80 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900 shadow-sm">
+      <p className="text-sm font-medium text-zinc-500">{label}</p>
+      <p className="mt-2 text-2xl font-extrabold tracking-tight">{value}</p>
       {hint ? <p className="mt-1 text-xs text-zinc-500">{hint}</p> : null}
     </article>
   );
@@ -170,7 +156,7 @@ function StatCard({
 
 function TokenCard({ token }: { token: CreatorToken }) {
   return (
-    <article className="rounded-2xl border border-zinc-200 p-5 dark:border-zinc-800">
+    <article className="rounded-2xl border border-zinc-200/80 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900 shadow-sm">
       <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h3 className="text-lg font-semibold">
@@ -236,7 +222,8 @@ function CopyField({
             href={href}
             target="_blank"
             rel="noreferrer"
-            className="text-xs font-semibold text-teal-700 dark:text-teal-400"
+            className="text-xs font-semibold underline-offset-2 hover:underline"
+            style={{ color: "var(--accent)" }}
           >
             Explorer
           </a>

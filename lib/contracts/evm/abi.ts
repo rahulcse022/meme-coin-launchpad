@@ -9,6 +9,8 @@ export const memeTokenAbi = [
       { name: "totalSupply_", type: "uint256" },
       { name: "creator_", type: "address" },
       { name: "feeRecipient_", type: "address" },
+      { name: "isMintable_", type: "bool" },
+      { name: "isBurnable_", type: "bool" },
     ],
   },
   {
@@ -45,5 +47,34 @@ export const memeTokenAbi = [
     stateMutability: "view",
     inputs: [],
     outputs: [{ type: "address" }],
+  },
+  {
+    type: "function",
+    name: "mint",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "to", type: "address" },
+      { name: "amount", type: "uint256" },
+    ],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "burn",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "amount", type: "uint256" },
+    ],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "burnFrom",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "account", type: "address" },
+      { name: "amount", type: "uint256" },
+    ],
+    outputs: [],
   },
 ] as const;

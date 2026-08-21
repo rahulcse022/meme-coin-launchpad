@@ -67,14 +67,6 @@ export function createTokenConfigSchema(family: ChainFamily) {
       twitter: optionalHttpUrl,
       telegram: optionalHttpUrl,
       discord: optionalHttpUrl,
-      totalSupply: z
-        .string()
-        .trim()
-        .regex(/^[0-9]+$/, "Total supply must be a whole number.")
-        .refine((value) => {
-          const supply = parseSupply(value);
-          return supply !== null && supply > BigInt(0);
-        }, "Total supply must be greater than zero."),
       decimals: z.coerce
         .number({ invalid_type_error: "Decimals must be a number." })
         .int("Decimals must be a whole number.")
@@ -94,47 +86,50 @@ export function createTokenConfigSchema(family: ChainFamily) {
           const supply = parseSupply(value);
           return supply !== null && supply > BigInt(0);
         }, "Initial supply must be greater than zero."),
+      hasAllocations: z.boolean().default(false),
       creatorAllocation: z.coerce
         .number({ invalid_type_error: "Creator allocation must be a number." })
         .min(0, "Creator allocation cannot be negative.")
-        .max(100, "Creator allocation cannot exceed 100%."),
+        .max(100, "Creator allocation cannot exceed 100%")
+        .optional()
+        .default(0),
       liquidityAllocation: z.coerce
         .number({ invalid_type_error: "Liquidity allocation must be a number." })
         .min(0, "Liquidity allocation cannot be negative.")
-        .max(100, "Liquidity allocation cannot exceed 100%."),
+        .max(100, "Liquidity allocation cannot exceed 100%")
+        .optional()
+        .default(0),
       communityAllocation: z.coerce
         .number({ invalid_type_error: "Community allocation must be a number." })
         .min(0, "Community allocation cannot be negative.")
-        .max(100, "Community allocation cannot exceed 100%."),
+        .max(100, "Community allocation cannot exceed 100%")
+        .optional()
+        .default(0),
       burnAllocation: z.coerce
         .number({ invalid_type_error: "Burn allocation must be a number." })
         .min(0, "Burn allocation cannot be negative.")
-        .max(100, "Burn allocation cannot exceed 100%."),
+        .max(100, "Burn allocation cannot exceed 100%")
+        .optional()
+        .default(0),
+      verifyOnExplorer: z.boolean().default(true),
+      isMintable: z.boolean().default(false),
+      isBurnable: z.boolean().default(true),
     })
     .superRefine((value, context) => {
-      const total =
-        value.creatorAllocation +
-        value.liquidityAllocation +
-        value.communityAllocation +
-        value.burnAllocation;
+      if (value.hasAllocations) {
+        const creator = value.creatorAllocation ?? 0;
+        const liquidity = value.liquidityAllocation ?? 0;
+        const community = value.communityAllocation ?? 0;
+        const burn = value.burnAllocation ?? 0;
+        const total = creator + liquidity + community + burn;
 
-      if (Math.abs(total - 100) > 0.001) {
-        context.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ["creatorAllocation"],
-          message: `Allocations must add up to 100%. Current total is ${total}%.`,
-        });
-      }
-
-      const totalSupply = parseSupply(value.totalSupply);
-      const initialSupply = parseSupply(value.initialSupply);
-
-      if (totalSupply !== null && initialSupply !== null && initialSupply > totalSupply) {
-        context.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ["initialSupply"],
-          message: "Initial supply cannot be greater than total supply.",
-        });
+        if (Math.abs(total - 100) > 0.001) {
+          context.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["creatorAllocation"],
+            message: `Allocations must add up to 100%. Current total is ${total}%.`,
+          });
+        }
       }
     });
 }
@@ -153,13 +148,16 @@ export function getTokenFormDefaults(family: ChainFamily): TokenConfigInput {
     twitter: "",
     telegram: "",
     discord: "",
-    totalSupply: "1000000000",
     decimals: rules.defaultDecimals,
     initialSupply: "1000000000",
+    hasAllocations: false,
     creatorAllocation: 10,
     liquidityAllocation: 70,
     communityAllocation: 15,
     burnAllocation: 5,
+    verifyOnExplorer: true,
+    isMintable: false,
+    isBurnable: true,
   };
 }
 

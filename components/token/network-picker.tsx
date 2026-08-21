@@ -65,10 +65,10 @@ function NetworkGroup({
               onClick={() => onChange(network)}
               aria-pressed={selected}
               className={cn(
-                "min-h-16 rounded-2xl border p-4 text-left",
+                "min-h-16 rounded-2xl border p-4 text-left transition-colors",
                 selected
-                  ? "border-teal-500 bg-teal-50 dark:bg-teal-950/40"
-                  : "border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950",
+                  ? "border-[color:var(--accent)] bg-[color:var(--accent-subtle)]"
+                  : "border-zinc-200/80 bg-white dark:border-zinc-800 dark:bg-zinc-900",
               )}
             >
               <span className="block font-semibold">{network.name}</span>

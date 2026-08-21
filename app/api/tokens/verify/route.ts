@@ -3,6 +3,7 @@ import { NextRequest } from "next/server";
 import { getNetworkById } from "@/config/chains";
 import { scaleTokenAmount } from "@/lib/blockchain/evm/scale-amount";
 import { verifyEvmTokenCreation } from "@/lib/blockchain/evm/verify-token-creation";
+import { verifySolanaTokenCreation } from "@/lib/blockchain/solana/verify-token-creation";
 import { getTronTransactionInfo } from "@/lib/blockchain/tron/verify";
 import { saveVerifiedToken } from "@/lib/tokens/save-verified-token";
 
@@ -14,6 +15,9 @@ const bodySchema = z.object({
   symbol: z.string().min(2),
   totalSupply: z.string().regex(/^[0-9]+$/),
   decimals: z.number().int().min(0).max(18),
+  verifyOnExplorer: z.boolean().optional(),
+  isMintable: z.boolean().optional(),
+  isBurnable: z.boolean().optional(),
 });
 
 const hits = new Map<string, { count: number; resetAt: number }>();
@@ -116,12 +120,73 @@ export async function POST(request: NextRequest) {
     });
   }
 
+  // --- Solana branch ---
+  if (network.family === "solana") {
+    let result;
+    try {
+      result = await verifySolanaTokenCreation({
+        networkId: parsed.data.networkId,
+        transactionHash: parsed.data.transactionHash,
+        creatorAddress: parsed.data.creatorAddress,
+        name: parsed.data.name,
+        symbol: parsed.data.symbol,
+        totalSupply: BigInt(parsed.data.totalSupply),
+        decimals: parsed.data.decimals,
+      });
+    } catch (error) {
+      return Response.json(
+        {
+          verified: false,
+          reason:
+            error instanceof Error
+              ? error.message
+              : "Solana token creation could not be verified.",
+        },
+        { status: 400 },
+      );
+    }
+
+    if (!result.verified) {
+      return Response.json(result, { status: 400 });
+    }
+
+    try {
+      await saveVerifiedToken({
+        networkId: parsed.data.networkId,
+        chain: network.family,
+        name: parsed.data.name,
+        symbol: parsed.data.symbol,
+        decimals: parsed.data.decimals,
+        totalSupply: parsed.data.totalSupply,
+        creatorAddress: parsed.data.creatorAddress,
+        tokenAddress: result.tokenAddress,
+        transactionHash: result.transactionHash,
+        isMintable: parsed.data.isMintable,
+        isBurnable: parsed.data.isBurnable,
+        verifyOnExplorer: parsed.data.verifyOnExplorer,
+      });
+    } catch (error) {
+      return Response.json(
+        {
+          verified: false,
+          reason:
+            error instanceof Error
+              ? error.message
+              : "The token was verified on-chain but could not be saved to MongoDB.",
+        },
+        { status: 500 },
+      );
+    }
+
+    return Response.json(result);
+  }
+
   // --- EVM branch ---
   if (network.family !== "evm") {
     return Response.json(
       {
         verified: false,
-        reason: "Only EVM and TRON token creation can be verified in this phase.",
+        reason: "Only EVM, TRON, and Solana token creation can be verified.",
       },
       { status: 400 },
     );
@@ -138,6 +203,8 @@ export async function POST(request: NextRequest) {
       symbol: parsed.data.symbol,
       totalSupply: scaleTokenAmount(BigInt(parsed.data.totalSupply), parsed.data.decimals),
       decimals: parsed.data.decimals,
+      isMintable: parsed.data.isMintable,
+      isBurnable: parsed.data.isBurnable,
     });
   } catch (error) {
     return Response.json(
@@ -167,6 +234,9 @@ export async function POST(request: NextRequest) {
       creatorAddress: parsed.data.creatorAddress,
       tokenAddress: result.tokenAddress,
       transactionHash: result.transactionHash,
+      isMintable: parsed.data.isMintable,
+      isBurnable: parsed.data.isBurnable,
+      verifyOnExplorer: parsed.data.verifyOnExplorer,
     });
   } catch (error) {
     return Response.json(

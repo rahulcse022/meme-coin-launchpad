@@ -7,7 +7,6 @@ import { navItems } from "@/config/site";
 import BrandMark from "@/components/layout/brand-mark";
 import ThemeToggle from "@/components/layout/theme-toggle";
 import ConnectButton from "@/components/wallet/connect-button";
-import NetworkButton from "@/components/wallet/network-button";
 import { cn } from "@/lib/utils/cn";
 
 export default function SiteHeader() {
@@ -36,7 +35,7 @@ export default function SiteHeader() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-zinc-200/80 bg-white/90 pt-[env(safe-area-inset-top)] backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-950/90">
+    <header className="sticky top-0 z-40 border-b border-zinc-200/80 bg-white/90 pt-[env(safe-area-inset-top)] backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/90">
       <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
         <BrandMark />
 
@@ -46,7 +45,7 @@ export default function SiteHeader() {
               key={item.href}
               href={item.href}
               className={cn(
-                "inline-flex min-h-11 items-center rounded-xl px-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500",
+                "inline-flex min-h-11 items-center rounded-xl px-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--accent)]",
                 pathname === item.href
                   ? "bg-zinc-100 text-zinc-950 dark:bg-zinc-900 dark:text-white"
                   : "text-zinc-600 hover:bg-zinc-50 hover:text-zinc-950 dark:text-zinc-300 dark:hover:bg-zinc-900 dark:hover:text-white",
@@ -61,11 +60,10 @@ export default function SiteHeader() {
           <div className="hidden sm:block">
             <ThemeToggle />
           </div>
-          <NetworkButton />
           <ConnectButton />
           <button
             type="button"
-            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-800 lg:hidden dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-zinc-200/80 bg-white text-zinc-800 lg:hidden dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100"
             aria-expanded={open}
             aria-controls={menuId}
             aria-label={open ? "Close menu" : "Open menu"}
@@ -79,7 +77,7 @@ export default function SiteHeader() {
       {open ? (
         <div
           id={menuId}
-          className="border-t border-zinc-200 bg-white px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] lg:hidden dark:border-zinc-800 dark:bg-zinc-950"
+          className="border-t border-zinc-200/80 bg-white px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] lg:hidden dark:border-zinc-800 dark:bg-zinc-900"
         >
           <nav className="flex flex-col gap-1" aria-label="Mobile">
             {navItems.map((item) => (

@@ -15,6 +15,9 @@ export async function saveVerifiedToken(input: {
   creatorAddress: string;
   tokenAddress: string;
   transactionHash: string;
+  isMintable?: boolean;
+  isBurnable?: boolean;
+  verifyOnExplorer?: boolean;
 }): Promise<CreatedTokenDocument> {
   const fee = getCreationFee(input.networkId);
   const feeRecipient = getFeeRecipientAddress(input.networkId);
@@ -33,6 +36,9 @@ export async function saveVerifiedToken(input: {
     feeAmount: fee.amount,
     feeCurrency: fee.currency,
     feeRecipient: feeRecipient.toLowerCase(),
+    isMintable: input.isMintable,
+    isBurnable: input.isBurnable,
+    verifyOnExplorer: input.verifyOnExplorer,
     createdAt: new Date(),
   };
 

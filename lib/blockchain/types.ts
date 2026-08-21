@@ -18,6 +18,11 @@ export type CreateTokenParams = {
   creatorAddress: string;
   metadataUri?: string;
   networkId?: string;
+  solanaProvider?: unknown;
+  solanaConnection?: unknown;
+  verifyOnExplorer?: boolean;
+  isMintable?: boolean;
+  isBurnable?: boolean;
 };
 
 export type CreateTokenResult = {

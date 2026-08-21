@@ -4,7 +4,7 @@ import { chainFamilies } from "@/config/chains";
 
 export default function SiteFooter() {
   return (
-    <footer className="mt-auto border-t border-zinc-200 bg-white pb-[max(1rem,env(safe-area-inset-bottom))] dark:border-zinc-800 dark:bg-zinc-950">
+    <footer className="mt-auto border-t border-zinc-200/80 bg-white pb-[max(1rem,env(safe-area-inset-bottom))] dark:border-zinc-800 dark:bg-zinc-900">
       <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-4 lg:px-8">
         <div className="space-y-3">
           <p className="text-sm font-semibold">{siteConfig.name}</p>

@@ -25,6 +25,8 @@ createAppKit({
   features: {
     analytics: true,
   },
+  themeMode: "dark",
+
 });
 
 export default function AppProviders({

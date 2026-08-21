@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   experimental: {
     useOffline: true,
   },
+  allowedDevOrigins: ["http://localhost:3000", "http://[IP_ADDRESS]", "https://meme-coin-launchpad.vercel.app"],
   async headers() {
     return [
       {

@@ -47,6 +47,9 @@ export type CreatedTokenDocument = {
   feeAmount: string;
   feeCurrency: string;
   feeRecipient: string;
+  isMintable?: boolean;
+  isBurnable?: boolean;
+  verifyOnExplorer?: boolean;
   createdAt: Date;
 };
 

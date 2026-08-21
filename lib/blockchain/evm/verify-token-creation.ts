@@ -25,6 +25,8 @@ export type VerifyEvmTokenInput = {
   symbol: string;
   totalSupply: bigint;
   decimals: number;
+  isMintable?: boolean;
+  isBurnable?: boolean;
 };
 
 export type VerifyEvmTokenResult =
@@ -158,11 +160,13 @@ export async function verifyEvmTokenCreation(
       decoded.args[2] !== input.decimals ||
       decoded.args[3] !== input.totalSupply ||
       getAddress(decoded.args[4]) !== creator ||
-      getAddress(decoded.args[5]) !== feeRecipient
+      getAddress(decoded.args[5]) !== feeRecipient ||
+      (decoded.args[6] !== undefined && decoded.args[6] !== (input.isMintable ?? false)) ||
+      (decoded.args[7] !== undefined && decoded.args[7] !== (input.isBurnable ?? true))
     ) {
       return {
         verified: false,
-        reason: "The deployment arguments do not match the submitted token and fee recipient.",
+        reason: "The deployment arguments do not match the submitted token, features, or fee recipient.",
       };
     }
   } catch {

@@ -82,6 +82,8 @@ export async function createEvmToken(
         onChainSupply,
         account.address,
         feeRecipient as `0x${string}`,
+        params.isMintable ?? false,
+        params.isBurnable ?? true,
       ],
       value: feeValue,
       chainId: network.evmChainId,

@@ -3,7 +3,8 @@
 import { useMemo, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAppKitAccount } from "@reown/appkit/react";
+import { useAppKitAccount, useAppKitProvider } from "@reown/appkit/react";
+import { useAppKitConnection } from "@reown/appkit-adapter-solana/react";
 import {
   getNetworkById,
   type ChainFamily,
@@ -27,6 +28,7 @@ import TokenPreview from "@/components/token/token-preview";
 import CreateFeePanel from "@/components/token/create-fee-panel";
 import CreateSuccess from "@/components/token/create-success";
 import { verifyCreatedToken } from "@/lib/tokens/verify-created-token";
+import { uploadMetadataToIpfs } from "@/lib/tokens/upload-to-ipfs";
 import { cn } from "@/lib/utils/cn";
 
 const steps = ["Blockchain", "Network", "Configure", "Preview"] as const;
@@ -34,6 +36,8 @@ type Step = 0 | 1 | 2 | 3;
 
 export default function CreateWizard() {
   const { address, isConnected } = useAppKitAccount();
+  const { walletProvider } = useAppKitProvider("solana");
+  const { connection } = useAppKitConnection();
   const [step, setStep] = useState<Step>(0);
   const [family, setFamily] = useState<ChainFamily | null>(null);
   const [networkId, setNetworkId] = useState<string | null>(null);
@@ -91,14 +95,43 @@ export default function CreateWizard() {
       let transactionHash = pendingHash;
 
       if (!transactionHash) {
+        let metadataUri = "";
+        if (family === "solana" && logoFile) {
+          setStatus("preparing");
+          try {
+            metadataUri = await uploadMetadataToIpfs({
+              name: draft.name,
+              symbol: draft.symbol,
+              description: draft.description,
+              logoFile,
+              website: draft.website || undefined,
+              twitter: draft.twitter || undefined,
+              telegram: draft.telegram || undefined,
+              discord: draft.discord || undefined,
+            });
+          } catch (uploadErr) {
+            throw new Error(
+              `Failed to upload token metadata to IPFS: ${
+                uploadErr instanceof Error ? uploadErr.message : String(uploadErr)
+              }`,
+            );
+          }
+        }
+
         setStatus("waiting_for_wallet");
         const submitted = await getBlockchainService(family).createToken({
           name: draft.name,
           symbol: draft.symbol,
           decimals: draft.decimals,
-          totalSupply: BigInt(draft.totalSupply),
+          totalSupply: BigInt(draft.initialSupply),
           creatorAddress: address,
           networkId: network.id,
+          solanaProvider: walletProvider,
+          solanaConnection: connection,
+          verifyOnExplorer: draft.verifyOnExplorer,
+          isMintable: draft.isMintable,
+          isBurnable: draft.isBurnable,
+          metadataUri: metadataUri || undefined,
         });
 
         if (!submitted.transactionHash) {
@@ -118,7 +151,7 @@ export default function CreateWizard() {
         creatorAddress: address,
         name: draft.name,
         symbol: draft.symbol,
-        totalSupply: draft.totalSupply,
+        totalSupply: draft.initialSupply,
         decimals: draft.decimals,
       });
 
@@ -144,8 +177,8 @@ export default function CreateWizard() {
             className={cn(
               "rounded-xl border px-3 py-2 text-sm",
               step === index
-                ? "border-teal-500 font-semibold"
-                : "border-zinc-200 text-zinc-500 dark:border-zinc-800",
+                ? "border-[color:var(--accent)] font-semibold text-[color:var(--accent)]"
+                : "border-zinc-200/80 text-zinc-500 dark:border-zinc-800",
             )}
           >
             {index + 1}. {label}
@@ -158,7 +191,7 @@ export default function CreateWizard() {
           <h2 className="text-lg font-semibold">Choose blockchain</h2>
           <ChainFamilyPicker value={family} onChange={selectFamily} />
           <div className="flex flex-col gap-3 sm:flex-row">
-            <Button disabled={!family} onClick={() => setStep(1)}>
+            <Button variant="gradient" disabled={!family} onClick={() => setStep(1)}>
               Continue
             </Button>
           </div>
@@ -197,7 +230,7 @@ export default function CreateWizard() {
             <Button variant="secondary" onClick={() => setStep(0)}>
               Back
             </Button>
-            <Button disabled={!networkId} onClick={goToConfigure}>
+            <Button variant="gradient" disabled={!networkId} onClick={goToConfigure}>
               Continue
             </Button>
           </div>
@@ -330,6 +363,7 @@ function ConfigureStep({
         <TokenFormFields
           family={family}
           register={form.register}
+          control={form.control}
           errors={form.formState.errors}
           logoError={logoError}
           onLogoChange={onLogoChange}
@@ -347,7 +381,7 @@ function ConfigureStep({
         <Button variant="secondary" onClick={onBack}>
           Back
         </Button>
-        <Button type="submit">Continue to preview</Button>
+        <Button variant="gradient" type="submit">Continue to preview</Button>
       </div>
     </form>
   );

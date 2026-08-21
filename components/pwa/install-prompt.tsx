@@ -66,7 +66,7 @@ export default function InstallPrompt() {
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-6">
-      <div className="pointer-events-auto mx-auto w-full max-w-lg rounded-2xl border border-zinc-200 bg-white p-4 shadow-xl dark:border-zinc-800 dark:bg-zinc-950">
+      <div className="pointer-events-auto mx-auto w-full max-w-lg rounded-2xl border border-zinc-200/80 bg-white p-4 shadow-xl dark:border-zinc-800 dark:bg-zinc-900">
         <p className="text-sm font-semibold">Install MemeLaunch</p>
         <p className="mt-1 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
           {isIos
@@ -77,7 +77,7 @@ export default function InstallPrompt() {
           {deferredPrompt ? (
             <button
               type="button"
-              className="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl bg-zinc-950 px-4 text-sm font-medium text-white dark:bg-white dark:text-zinc-950"
+              className="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl bg-zinc-900 px-4 text-sm font-semibold text-white transition-all active:scale-[0.98] dark:bg-zinc-100 dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-white"
               onClick={() => void install()}
             >
               Install
