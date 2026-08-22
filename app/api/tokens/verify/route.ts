@@ -6,6 +6,7 @@ import { verifyEvmTokenCreation } from "@/lib/blockchain/evm/verify-token-creati
 import { verifySolanaTokenCreation } from "@/lib/blockchain/solana/verify-token-creation";
 import { getTronTransactionInfo } from "@/lib/blockchain/tron/verify";
 import { saveVerifiedToken } from "@/lib/tokens/save-verified-token";
+import { submitExplorerVerification } from "@/lib/blockchain/evm/verify-source-code";
 
 const bodySchema = z.object({
   networkId: z.string().min(1),
@@ -251,5 +252,52 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  return Response.json(result);
+  let explorerVerification: { success: boolean; result?: string; error?: string } | undefined = undefined;
+
+  if (parsed.data.verifyOnExplorer && result.transactionInput) {
+    let attempts = 0;
+    const maxAttempts = 5;
+
+    while (attempts < maxAttempts) {
+      attempts++;
+      try {
+        // Wait to ensure the block explorer has indexed the newly created contract
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+
+        explorerVerification = await submitExplorerVerification({
+          networkId: parsed.data.networkId,
+          contractAddress: result.tokenAddress,
+          transactionInputHex: result.transactionInput,
+        });
+
+        if (
+          !explorerVerification.success &&
+          explorerVerification.error?.includes("Unable to locate ContractCode") &&
+          attempts < maxAttempts
+        ) {
+          console.log(`Explorer verification pending, contract not found yet (attempt ${attempts}). Retrying...`);
+          continue; // Retry
+        }
+
+        console.log("Explorer verification submission result:", explorerVerification);
+        break; // Success or non-retriable error
+      } catch (err) {
+        console.error(`Failed to submit explorer verification (attempt ${attempts}):`, err);
+        explorerVerification = {
+          success: false,
+          error: err instanceof Error ? err.message : String(err),
+        };
+        if (attempts >= maxAttempts) {
+          break;
+        }
+      }
+    }
+  }
+
+  return Response.json({
+    verified: true,
+    tokenAddress: result.tokenAddress,
+    transactionHash: result.transactionHash,
+    explorerVerification,
+  });
 }

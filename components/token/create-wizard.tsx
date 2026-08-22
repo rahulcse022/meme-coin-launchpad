@@ -27,7 +27,7 @@ import TokenFormFields from "@/components/token/token-form-fields";
 import TokenPreview from "@/components/token/token-preview";
 import CreateFeePanel from "@/components/token/create-fee-panel";
 import CreateSuccess from "@/components/token/create-success";
-import { verifyCreatedToken } from "@/lib/tokens/verify-created-token";
+import { verifyCreatedToken, type VerifiedTokenCreation } from "@/lib/tokens/verify-created-token";
 import { uploadMetadataToIpfs } from "@/lib/tokens/upload-to-ipfs";
 import { cn } from "@/lib/utils/cn";
 
@@ -48,10 +48,7 @@ export default function CreateWizard() {
   const [logoError, setLogoError] = useState<string | undefined>();
   const [status, setStatus] = useState<TransactionStatus | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
-  const [createdToken, setCreatedToken] = useState<{
-    tokenAddress: string;
-    transactionHash: string;
-  } | null>(null);
+  const [createdToken, setCreatedToken] = useState<VerifiedTokenCreation | null>(null);
   const [pendingHash, setPendingHash] = useState<string | null>(null);
 
   const network = networkId ? getNetworkById(networkId) : undefined;
@@ -153,6 +150,9 @@ export default function CreateWizard() {
         symbol: draft.symbol,
         totalSupply: draft.initialSupply,
         decimals: draft.decimals,
+        verifyOnExplorer: draft.verifyOnExplorer,
+        isMintable: draft.isMintable,
+        isBurnable: draft.isBurnable,
       });
 
       setCreatedToken(verified);
@@ -289,6 +289,7 @@ export default function CreateWizard() {
                 symbol={draft.symbol}
                 decimals={draft.decimals}
                 logoUrl={logoUrl}
+                explorerVerification={createdToken.explorerVerification}
               />
             ) : (
               <CreateFeePanel

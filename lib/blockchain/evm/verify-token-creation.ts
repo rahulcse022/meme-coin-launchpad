@@ -34,6 +34,7 @@ export type VerifyEvmTokenResult =
       verified: true;
       tokenAddress: Address;
       transactionHash: Hash;
+      transactionInput?: string;
     }
   | {
       verified: false;
@@ -254,5 +255,6 @@ export async function verifyEvmTokenCreation(
     verified: true,
     tokenAddress,
     transactionHash: hash,
+    transactionInput: transaction.input,
   };
 }

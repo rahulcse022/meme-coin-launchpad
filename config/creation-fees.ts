@@ -24,25 +24,25 @@ export type NetworkFeeConfig = {
 
 export const NETWORK_FEE_CONFIG_MAP: Record<string, NetworkFeeConfig> = {
   // EVM
-  ethereum: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.001" },
-  bnb: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.001" },
-  polygon: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.001" },
-  base: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.001" },
-  arbitrum: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.001" },
-  sepolia: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.001" },
-  "bsc-testnet": { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.001" },
-  "polygon-amoy": { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.001" },
-  "base-sepolia": { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.001" },
-  "arbitrum-sepolia": { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.001" },
+  ethereum: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.0005" },
+  bnb: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.0005" },
+  polygon: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.0005" },
+  base: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.0005" },
+  arbitrum: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.0005" },
+  sepolia: { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.0005" },
+  "bsc-testnet": { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.0005" },
+  "polygon-amoy": { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.0005" },
+  "base-sepolia": { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.0005" },
+  "arbitrum-sepolia": { recipient: EVM_FEE_RECIPIENT_ADDRESS, amount: "0.0005" },
 
   // Solana
-  solana: { recipient: SOLANA_FEE_RECIPINT_ADDRESS, amount: "0.001" },
-  "solana-devnet": { recipient: SOLANA_DEVNET_RECIPINT_ADDRESS, amount: "0.001" },
-  "solana-testnet": { recipient: SOLANA_DEVNET_RECIPINT_ADDRESS, amount: "0.001" },
+  solana: { recipient: SOLANA_FEE_RECIPINT_ADDRESS, amount: "0.0005" },
+  "solana-devnet": { recipient: SOLANA_DEVNET_RECIPINT_ADDRESS, amount: "0.0005" },
+  "solana-testnet": { recipient: SOLANA_DEVNET_RECIPINT_ADDRESS, amount: "0.0005" },
 
   // Tron
-  tron: { recipient: SHASTA_FEE_RECIPINT_ADDRESS, amount: "0.001" },
-  "tron-shasta": { recipient: SHASTA_FEE_RECIPINT_ADDRESS, amount: "0.001" },
+  tron: { recipient: SHASTA_FEE_RECIPINT_ADDRESS, amount: "0.0005" },
+  "tron-shasta": { recipient: SHASTA_FEE_RECIPINT_ADDRESS, amount: "0.0005" },
 };
 
 

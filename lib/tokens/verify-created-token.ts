@@ -1,6 +1,11 @@
 export type VerifiedTokenCreation = {
   tokenAddress: string;
   transactionHash: string;
+  explorerVerification?: {
+    success: boolean;
+    result?: string;
+    error?: string;
+  };
 };
 
 export async function verifyCreatedToken(input: {
@@ -11,6 +16,9 @@ export async function verifyCreatedToken(input: {
   symbol: string;
   totalSupply: string;
   decimals: number;
+  verifyOnExplorer?: boolean;
+  isMintable?: boolean;
+  isBurnable?: boolean;
 }): Promise<VerifiedTokenCreation> {
   const response = await fetch("/api/tokens/verify", {
     method: "POST",
@@ -23,6 +31,11 @@ export async function verifyCreatedToken(input: {
         verified: true;
         tokenAddress: string;
         transactionHash: string;
+        explorerVerification?: {
+          success: boolean;
+          result?: string;
+          error?: string;
+        };
       }
     | {
         verified: false;
@@ -46,5 +59,6 @@ export async function verifyCreatedToken(input: {
   return {
     tokenAddress: payload.tokenAddress,
     transactionHash: payload.transactionHash,
+    explorerVerification: payload.explorerVerification,
   };
 }
