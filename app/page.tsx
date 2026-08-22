@@ -335,9 +335,9 @@ function HeroGraphic() {
       <div className="animate-float relative flex h-32 w-32 items-center justify-center">
         {/* Neon outer glow */}
         <div className="absolute inset-2 rounded-full bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 opacity-60 blur-md animate-pulse" />
-        
+
         {/* Glossy Coin Border & Image Crop */}
-        <div className="relative h-28 w-28 overflow-hidden rounded-full border-4 border-zinc-200 bg-zinc-100 shadow-2xl dark:border-zinc-800 dark:bg-zinc-950 ring-1 ring-black/5 dark:ring-white/10">
+        <div className="relative">
           <Image
             src="/icons/logo.png"
             alt="MemeLaunch Logo"
@@ -346,7 +346,7 @@ function HeroGraphic() {
             className="size-full object-cover scale-110"
           />
           {/* Glass glare effect overlay */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/20 pointer-events-none" />
+          {/* <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/20 pointer-events-none" /> */}
         </div>
       </div>
 

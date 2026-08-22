@@ -8,7 +8,7 @@ export default function BrandMark() {
       href="/"
       className="flex min-h-11 items-center gap-2 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--accent)]"
     >
-      <span className="relative inline-flex size-9 shrink-0 overflow-hidden rounded-xl bg-[#0B1220] ring-1 ring-white/10">
+      <span className="relative inline-flex size-9 shrink-0">
         <Image
           src="/icons/logo.png"
           alt="MemeLaunch Logo"

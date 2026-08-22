@@ -60,10 +60,12 @@ export default function SiteHeader() {
           <div className="hidden sm:block">
             <ThemeToggle />
           </div>
-          <ConnectButton />
+          <div className="hidden lg:block">
+            <ConnectButton />
+          </div>
           <button
             type="button"
-            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-zinc-200/80 bg-white text-zinc-800 lg:hidden dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100"
+            className="relative z-50 inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-zinc-200/80 bg-white text-zinc-800 lg:hidden dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100"
             aria-expanded={open}
             aria-controls={menuId}
             aria-label={open ? "Close menu" : "Open menu"}
@@ -96,11 +98,42 @@ export default function SiteHeader() {
               </Link>
             ))}
           </nav>
-          <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-zinc-200 p-3 dark:border-zinc-800">
-            <span className="text-sm font-medium text-zinc-600 dark:text-zinc-300">
-              Theme
-            </span>
-            <ThemeToggle />
+
+
+
+          <div className="mt-6 rounded-2xl border border-zinc-200/60 bg-zinc-50/80 p-4 dark:border-zinc-800/60 dark:bg-zinc-900/40 space-y-4">
+            {/* Wallet Connection Row */}
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex flex-col min-w-0">
+                <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                  Wallet Connection
+                </span>
+                <span className="text-xs text-zinc-500 truncate">
+                  Manage your Web3 identity
+                </span>
+              </div>
+              <div className="shrink-0">
+                <ConnectButton />
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="border-t border-zinc-200/60 dark:border-zinc-800/60" />
+
+            {/* Theme Switch Row */}
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                  Theme Mode
+                </span>
+                <span className="text-xs text-zinc-500">
+                  Switch between light and dark
+                </span>
+              </div>
+              <div className="shrink-0">
+                <ThemeToggle />
+              </div>
+            </div>
           </div>
         </div>
       ) : null}
